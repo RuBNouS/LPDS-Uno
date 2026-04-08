@@ -11,10 +11,10 @@
                         Background="White" Foreground="black" BorderBrush="black" BorderThickness="1"
                         Height="50" Width="150" FontSize="20" HorizontalAlignment="left" Margin="30,20"
                         Style="{StaticResource RoundedButtonStyle}" />
-                <Grid Height="650">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,0,0">
-                        <StackPanel Width="960" Height="600">
-                            <TextBlock Text="Regras do Jogo" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                <Grid>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Width="960" Height="590">
+                            <TextBlock Text="Regras do Jogo" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center"/>
 
                             <TextBlock Text="Objetivo" FontSize="18" FontWeight="Bold" Foreground="red" Margin="0,0,0,5"/>
                             <TextBlock Text="Ser o primeiro jogador a descartar todas as cartas da mão. O jogo pode ter várias rondas; os pontos acumulam-se com as cartas que os adversários ainda têm."
