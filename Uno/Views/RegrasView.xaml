@@ -9,45 +9,45 @@
 
                 <Button Command="{Binding VoltarCommand}" Content="Menu"
                         Background="White" Foreground="black" BorderBrush="black" BorderThickness="1"
-                        Height="50" Width="150" FontSize="20" HorizontalAlignment="left" Margin="30,20"
+                        Height="50" Width="150" FontSize="20" HorizontalAlignment="left" Margin="30"
                         Style="{StaticResource RoundedButtonStyle}" />
                 <Grid>
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel Width="960" Height="590">
+                        <StackPanel Width="560" Height="590">
                             <TextBlock Text="Regras do Jogo" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center"/>
 
-                            <TextBlock Text="Objetivo" FontSize="18" FontWeight="Bold" Foreground="red" Margin="0,0,0,5"/>
+                            <TextBlock Text="Objetivo" FontSize="20" FontWeight="Bold" Foreground="red" Margin="0,0,0,5"/>
                             <TextBlock Text="Ser o primeiro jogador a descartar todas as cartas da mão. O jogo pode ter várias rondas; os pontos acumulam-se com as cartas que os adversários ainda têm."
-									   TextWrapping="Wrap" Foreground="#333333" Margin="0,0,0,20" LineHeight="22"/>
+									   TextWrapping="Wrap" Foreground="black" Margin="0,0,0,20" LineHeight="22"/>
 
-                            <TextBlock Text="Como Jogar" FontSize="18" FontWeight="Bold" Foreground="red" Margin="0,0,0,5"/>
+                            <TextBlock Text="Como Jogar" FontSize="20" FontWeight="Bold" Foreground="red" Margin="0,0,0,5"/>
                             <TextBlock Text="No teu turno, joga uma carta que corresponda à cor ou ao número da carta no topo da pilha de descarte. Se não tiveres nenhuma carta válida, retira uma carta do baralho."
-									   TextWrapping="Wrap" Foreground="#333333" Margin="0,0,0,20" LineHeight="22"/>
+									   TextWrapping="Wrap" Foreground="black" Margin="0,0,0,20" LineHeight="22"/>
 
-                            <TextBlock Text="Cartas Especiais" FontSize="18" FontWeight="Bold" Foreground="red" Margin="0,0,0,10"/>
+                            <TextBlock Text="Cartas Especiais" FontSize="20" FontWeight="Bold" Foreground="red" Margin="0,0,0,10"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
-                                <Border Background="#333333" Width="50" Height="35" CornerRadius="5" Margin="5">
+                                <Border Background="black" Width="50" Height="35" CornerRadius="5" Margin="5">
                                     <TextBlock Text="⇄" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                                 </Border>
-                                <Border Background="#333333" Width="50" Height="35" CornerRadius="5" Margin="5">
+                                <Border Background="black" Width="50" Height="35" CornerRadius="5" Margin="5">
                                     <TextBlock Text="Ø" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                                 </Border>
-                                <Border Background="#333333" Width="50" Height="35" CornerRadius="5" Margin="5">
+                                <Border Background="black" Width="50" Height="35" CornerRadius="5" Margin="5">
                                     <TextBlock Text="+2" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                                 </Border>
-                                <Border Background="#333333" Width="50" Height="35" CornerRadius="5" Margin="5">
+                                <Border Background="black" Width="50" Height="35" CornerRadius="5" Margin="5">
                                     <TextBlock Text="W" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                                 </Border>
-                                <Border Background="#333333" Width="50" Height="35" CornerRadius="5" Margin="5">
+                                <Border Background="black" Width="50" Height="35" CornerRadius="5" Margin="5">
                                     <TextBlock Text="+4" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                                 </Border>
                             </StackPanel>
                             <TextBlock Text="Inverter, Bloquear, +2, Wild Card e Wild +4."
-									   HorizontalAlignment="Center" Foreground="#666666" Margin="0,0,0,20"/>
+									   HorizontalAlignment="Center" Foreground="black" Margin="0,0,0,20"/>
 
-                            <TextBlock Text="Dizer UNO!" FontSize="18" FontWeight="Bold" Foreground="red" Margin="0,0,0,5"/>
+                            <TextBlock Text="Dizer UNO!" FontSize="20" FontWeight="Bold" Foreground="red" Margin="0,0,0,5"/>
                             <TextBlock Text="Quando te restar apenas uma carta, deves clicar no botão UNO!. Se não o fizeres e outro jogador se aperceber, terás de comprar cartas de penalização."
-									   TextWrapping="Wrap" Foreground="#333333" Margin="0,0,0,30" LineHeight="22"/>
+									   TextWrapping="Wrap" Foreground="black" Margin="0,0,0,30" LineHeight="22"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
