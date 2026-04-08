@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnoDesktopGame.Models
+namespace Uno.Models
 {
     [Serializable]
     public class Carta

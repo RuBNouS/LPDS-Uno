@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace UnoDesktopGame.Converters
+namespace Uno.Converters
 {
     public class StringToColorConverter : IValueConverter
     {

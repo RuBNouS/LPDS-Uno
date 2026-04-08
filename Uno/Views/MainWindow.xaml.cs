@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace UnoDesktopGame.Views
+namespace Uno.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Xml.Serialization;
 
-namespace UnoDesktopGame.Models
+namespace Uno.Models
 {
     [Serializable]
     public class Jogador

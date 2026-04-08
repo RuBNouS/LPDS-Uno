@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace UnoDesktopGame.Views
+namespace Uno.Views
 {
     /// <summary>
     /// Interaction logic for LobbyView.xaml

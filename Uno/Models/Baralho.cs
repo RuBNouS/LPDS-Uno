@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UnoDesktopGame.Models
+namespace Uno.Models
 {
     [Serializable]
     public class Baralho

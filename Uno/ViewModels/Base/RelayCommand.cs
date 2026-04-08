@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace UnoDesktopGame.ViewModels.Base
+namespace Uno.ViewModels.Base
 {
     public class RelayCommand : ICommand
     {

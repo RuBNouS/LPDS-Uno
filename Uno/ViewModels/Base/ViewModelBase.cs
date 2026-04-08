@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace UnoDesktopGame.ViewModels.Base
+namespace Uno.ViewModels.Base
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {

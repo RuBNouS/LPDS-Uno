@@ -1,10 +1,10 @@
-﻿<Window x:Class="UnoDesktopGame.Views.MainWindow"
+﻿<Window x:Class="Uno.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewmodels="clr-namespace:UnoDesktopGame.ViewModels"
-        xmlns:views="clr-namespace:UnoDesktopGame.Views"
+        xmlns:viewmodels="clr-namespace:Uno.ViewModels"
+        xmlns:views="clr-namespace:Uno.Views"
         mc:Ignorable="d"
         Title="UNO Desktop" Height="720" Width="1080" WindowStartupLocation="CenterScreen">
 

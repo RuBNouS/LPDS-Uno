@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using UnoDesktopGame.Models;
-using UnoDesktopGame.Services;
-using UnoDesktopGame.ViewModels.Base;
+using Uno.Models;
+using Uno.Services;
+using Uno.ViewModels.Base;
 
-namespace UnoDesktopGame.ViewModels
+namespace Uno.ViewModels
 {
     public class TabuleiroViewModel : ViewModelBase
     {
@@ -112,6 +112,24 @@ namespace UnoDesktopGame.ViewModels
 
             jogador.Cartas.Remove(carta);
             JogoAtual.Mesa.CartasJogadas.Add(carta);
+
+            // SE A CARTA FOR PRETA E FOR O HUMANO A JOGAR
+            if (carta.Cor == "Preto" && !jogador.IsBot)
+            {
+                var popup = new Views.SelecaoCorView();
+                if (popup.ShowDialog() == true)
+                {
+                    // Muda a cor "virtual" da carta na mesa para a cor escolhida!
+                    CartaTopo.Cor = popup.CorEscolhida;
+                }
+            }
+            // SE FOR O BOT A JOGAR, ELE ESCOLHE UMA COR ALEATÓRIA (IA Simples)
+            else if (carta.Cor == "Preto" && jogador.IsBot)
+            {
+                string[] cores = { "Vermelho", "Azul", "Verde", "Amarelo" };
+                CartaTopo.Cor = cores[new Random().Next(0, 4)];
+            }
+
             OnPropertyChanged(nameof(CartaTopo));
 
             // Verificar Fim de Jogo

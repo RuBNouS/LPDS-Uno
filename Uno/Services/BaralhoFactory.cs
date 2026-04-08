@@ -1,11 +1,11 @@
-﻿using UnoDesktopGame.Models;
+﻿using Uno.Models;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnoDesktopGame.Models;
+using Uno.Models;
 
-namespace UnoDesktopGame.Services
+namespace Uno.Services
 {
     public static class BaralhoFactory
     {

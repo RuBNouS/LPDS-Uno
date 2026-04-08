@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using UnoDesktopGame.Views;
-using UnoDesktopGame.ViewModels;
+using Uno.Views;
+using Uno.ViewModels;
 
-namespace UnoDesktopGame
+namespace Uno
 {
     public partial class App : Application
     {

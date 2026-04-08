@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using UnoDesktopGame.Models;
-using UnoDesktopGame.Services;
-using UnoDesktopGame.ViewModels.Base;
+using Uno.Models;
+using Uno.Services;
+using Uno.ViewModels.Base;
 
-namespace UnoDesktopGame.ViewModels
+namespace Uno.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {

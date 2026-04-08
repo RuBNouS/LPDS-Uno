@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace UnoDesktopGame.Services
+namespace Uno.Services
 {
     public class XmlDataService
     {

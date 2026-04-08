@@ -2,10 +2,10 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using UnoDesktopGame.Services;
-using UnoDesktopGame.ViewModels.Base;
+using Uno.Services;
+using Uno.ViewModels.Base;
 
-namespace UnoDesktopGame.ViewModels
+namespace Uno.ViewModels
 {
     public class LobbyViewModel : ViewModelBase
     {
