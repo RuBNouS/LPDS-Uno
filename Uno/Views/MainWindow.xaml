@@ -6,7 +6,7 @@
         xmlns:viewmodels="clr-namespace:Uno.ViewModels"
         xmlns:views="clr-namespace:Uno.Views"
         mc:Ignorable="d"
-        Title="UNO Desktop" Height="720" Width="1080" WindowStartupLocation="CenterScreen">
+        Title="UNO Desktop" Height="700" Width="1000" WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
         <viewmodels:MainViewModel/>
