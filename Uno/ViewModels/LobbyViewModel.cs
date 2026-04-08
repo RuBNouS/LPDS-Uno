@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Uno.Models;
 using Uno.Services;
 using Uno.ViewModels.Base;
 
@@ -12,61 +12,74 @@ namespace Uno.ViewModels
         private readonly MainViewModel _mainViewModel;
         private readonly XmlDataService _dataService;
 
-        private ComboBoxItem _numeroBotsSelecionado;
-        public ComboBoxItem NumeroBotsSelecionado
-        {
-            get => _numeroBotsSelecionado;
-            set { _numeroBotsSelecionado = value; OnPropertyChanged(); }
-        }
+        public int NumeroBots { get; set; } = 1;
+        public ObservableCollection<int> OpcoesBots { get; } = new ObservableCollection<int> { 1, 2, 3 };
 
-        public ICommand CriarJogoCommand { get; }
+        public bool PodeRetomar => _dataService.HasSavedGame();
+
+        public ICommand CriarNovoJogoCommand { get; }
         public ICommand RetomarPartidaCommand { get; }
         public ICommand VerRegrasCommand { get; }
-        public ICommand VerEstatisticasCommand { get; }
+        public ICommand ConsultarEstatisticasCommand { get; }
 
         public LobbyViewModel(MainViewModel mainViewModel, XmlDataService dataService)
         {
             _mainViewModel = mainViewModel;
             _dataService = dataService;
 
-            CriarJogoCommand = new RelayCommand(ExecutarCriarJogo);
-            RetomarPartidaCommand = new RelayCommand(ExecutarRetomarPartida, PodeRetomarPartida);
-            VerRegrasCommand = new RelayCommand(o => MessageBox.Show("Regras do UNO: Fica sem cartas na mão! (Aqui abririas outra View)", "Regras", MessageBoxButton.OK, MessageBoxImage.Information));
-            VerEstatisticasCommand = new RelayCommand(o => MessageBox.Show("Estatísticas ainda em construção.", "Estatísticas", MessageBoxButton.OK, MessageBoxImage.Information));
+            CriarNovoJogoCommand = new RelayCommand(ExecutarCriarNovoJogo);
+            RetomarPartidaCommand = new RelayCommand(ExecutarRetomarPartida, o => PodeRetomar);
+            VerRegrasCommand = new RelayCommand(ExecutarVerRegras);
+            ConsultarEstatisticasCommand = new RelayCommand(ExecutarConsultarEstatisticas);
         }
 
-        private void ExecutarCriarJogo(object parametro)
+        private void ExecutarCriarNovoJogo(object obj)
         {
-            int numeroBots = 1; // Padrão
+            var jogo = new Jogo();
+            string userName = Environment.UserName;
+            jogo.Jogadores.Add(new Jogador { Nome = userName, IsBot = false });
 
-            if (NumeroBotsSelecionado?.Content != null && int.TryParse(NumeroBotsSelecionado.Content.ToString(), out int parsedBots))
+            for (int i = 1; i <= NumeroBots; i++)
             {
-                numeroBots = parsedBots;
+                jogo.Jogadores.Add(new Jogador { Nome = $"Bot {i}", IsBot = true });
             }
 
-            _mainViewModel.IniciarNovoJogo(numeroBots);
-        }
+            jogo.Mesa.Baralho = BaralhoFactory.GerarBaralhoOficial();
 
-        private bool PodeRetomarPartida(object parametro)
-        {
-            // O botão de retomar só fica clicável se o ficheiro XML existir
-            return _dataService.HasSavedGame();
-        }
-
-        private void ExecutarRetomarPartida(object parametro)
-        {
-            try
+            foreach (var jogador in jogo.Jogadores)
             {
-                var jogoSuspenso = _dataService.LoadGame();
-                if (jogoSuspenso != null)
+                for (int i = 0; i < 7; i++)
                 {
-                    _mainViewModel.NavegarParaTabuleiro(jogoSuspenso);
+                    jogador.Cartas.Add(jogo.Mesa.Baralho.Cartas[0]);
+                    jogo.Mesa.Baralho.Cartas.RemoveAt(0);
                 }
             }
-            catch (Exception ex)
+
+            int idxCartaTopo = 0;
+            while (jogo.Mesa.Baralho.Cartas[idxCartaTopo].Cor == "Preto")
             {
-                MessageBox.Show($"Erro ao carregar o jogo salvo: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                idxCartaTopo++;
             }
+            var cartaTopo = jogo.Mesa.Baralho.Cartas[idxCartaTopo];
+            jogo.Mesa.Baralho.Cartas.RemoveAt(idxCartaTopo);
+            jogo.Mesa.CartasJogadas.Add(cartaTopo);
+
+            _mainViewModel.NavegarParaTabuleiro(jogo);
+        }
+
+        private void ExecutarRetomarPartida(object obj)
+        {
+            _mainViewModel.NavegarParaSaves();
+        }
+
+        private void ExecutarVerRegras(object obj)
+        {
+            _mainViewModel.NavegarParaRegras();
+        }
+
+        private void ExecutarConsultarEstatisticas(object obj)
+        {
+
         }
     }
 }

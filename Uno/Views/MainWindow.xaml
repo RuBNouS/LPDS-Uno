@@ -8,6 +8,10 @@
         mc:Ignorable="d"
         Title="UNO Desktop" Height="720" Width="1080" WindowStartupLocation="CenterScreen">
 
+    <Window.DataContext>
+        <viewmodels:MainViewModel/>
+    </Window.DataContext>
+
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodels:LobbyViewModel}">
             <views:LobbyView/>
@@ -17,6 +21,12 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodels:ResultadosViewModel}">
             <views:ResultadosView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:RegrasViewModel}">
+            <views:RegrasView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:SavesViewModel}">
+            <views:SavesView/>
         </DataTemplate>
     </Window.Resources>
 

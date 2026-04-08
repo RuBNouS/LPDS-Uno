@@ -12,14 +12,14 @@ namespace Uno.ViewModels
     public class TabuleiroViewModel : ViewModelBase
     {
         private readonly XmlDataService _dataService;
-        private readonly MainViewModel _mainViewModel; // Variável adicionada
+        private readonly MainViewModel _mainViewModel;
         private Jogo _jogoAtual;
         private bool _isHumanTurn;
         private bool _unoGritadoPeloHumano;
-        private int _sentidoJogo = 1; // 1 para a direita, -1 para a esquerda
+        private int _sentidoJogo = 1;
         private int _indiceJogadorAtual;
+        private string _nomeSaveCarregado; // Armazena o nome do save se foi carregado
 
-        // Propriedades para Bindings na UI
         public Jogo JogoAtual
         {
             get => _jogoAtual;
@@ -31,27 +31,33 @@ namespace Uno.ViewModels
         public bool IsHumanTurn
         {
             get => _isHumanTurn;
-            set { _isHumanTurn = value; OnPropertyChanged(); }
+            set
+            {
+                _isHumanTurn = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(MensagemTurno));
+            }
         }
+
+        public string MensagemTurno => IsHumanTurn ? "A tua vez" : $"Vez de: {JogoAtual?.JogadorAtivo?.Nome}";
 
         public ObservableCollection<Carta> MaoHumano => JogoAtual?.Jogadores.FirstOrDefault(j => !j.IsBot)?.Cartas;
 
-        // Comandos (Ações dos botões)
         public ICommand JogarCartaCommand { get; }
         public ICommand ComprarCartaCommand { get; }
         public ICommand GritarUnoCommand { get; }
         public ICommand SuspenderPartidaCommand { get; }
 
-        // Construtor corrigido com os 3 argumentos
-        public TabuleiroViewModel(Jogo jogo, XmlDataService dataService, MainViewModel mainViewModel)
+        public TabuleiroViewModel(Jogo jogo, XmlDataService dataService, MainViewModel mainViewModel, string nomeSaveCarregado = null)
         {
             _jogoAtual = jogo;
             _dataService = dataService;
-            _mainViewModel = mainViewModel; // Guardamos a referência
+            _mainViewModel = mainViewModel;
+            _nomeSaveCarregado = nomeSaveCarregado; // Armazena se o jogo foi carregado de um save
 
             JogarCartaCommand = new RelayCommand(ExecutarJogarCarta, PodeJogarCarta);
-            ComprarCartaCommand = new RelayCommand(ExecutarComprarCarta, o => IsHumanTurn);
-            GritarUnoCommand = new RelayCommand(o => _unoGritadoPeloHumano = true, o => IsHumanTurn && MaoHumano.Count == 2);
+            ComprarCartaCommand = new RelayCommand(ExecutarComprarCarta, PodeComprarCarta);
+            GritarUnoCommand = new RelayCommand(o => _unoGritadoPeloHumano = true, o => IsHumanTurn && MaoHumano?.Count == 2);
             SuspenderPartidaCommand = new RelayCommand(ExecutarSuspenderPartida);
 
             IniciarJogo();
@@ -67,11 +73,13 @@ namespace Uno.ViewModels
         {
             JogoAtual.JogadorAtivo = JogoAtual.Jogadores[_indiceJogadorAtual];
             OnPropertyChanged(nameof(JogoAtual));
+            OnPropertyChanged(nameof(MensagemTurno));
 
             if (!JogoAtual.JogadorAtivo.IsBot)
             {
                 IsHumanTurn = true;
-                _unoGritadoPeloHumano = false; // Reset para o turno
+                _unoGritadoPeloHumano = false;
+                CommandManager.InvalidateRequerySuggested();
             }
             else
             {
@@ -83,9 +91,15 @@ namespace Uno.ViewModels
         private bool PodeJogarCarta(object parametro)
         {
             if (!IsHumanTurn || parametro is not Carta carta) return false;
-
-            // Regra UNO Oficial: Cores iguais, Símbolos iguais ou cartas pretas (Wild)
             return carta.Cor == CartaTopo.Cor || carta.Simbolo == CartaTopo.Simbolo || carta.Cor == "Preto";
+        }
+
+        private bool PodeComprarCarta(object parametro)
+        {
+            if (!IsHumanTurn || MaoHumano == null) return false;
+
+            bool temCartaJogavel = MaoHumano.Any(c => c.Cor == CartaTopo.Cor || c.Simbolo == CartaTopo.Simbolo || c.Cor == "Preto");
+            return !temCartaJogavel;
         }
 
         private void ExecutarJogarCarta(object parametro)
@@ -104,7 +118,6 @@ namespace Uno.ViewModels
 
         private void AplicarJogada(Jogador jogador, Carta carta)
         {
-            // Validação de penalização por esquecer o UNO
             if (!jogador.IsBot && jogador.Cartas.Count == 2 && !_unoGritadoPeloHumano)
             {
                 ComprarCartas(jogador, 2);
@@ -113,17 +126,14 @@ namespace Uno.ViewModels
             jogador.Cartas.Remove(carta);
             JogoAtual.Mesa.CartasJogadas.Add(carta);
 
-            // SE A CARTA FOR PRETA E FOR O HUMANO A JOGAR
             if (carta.Cor == "Preto" && !jogador.IsBot)
             {
                 var popup = new Views.SelecaoCorView();
                 if (popup.ShowDialog() == true)
                 {
-                    // Muda a cor "virtual" da carta na mesa para a cor escolhida!
                     CartaTopo.Cor = popup.CorEscolhida;
                 }
             }
-            // SE FOR O BOT A JOGAR, ELE ESCOLHE UMA COR ALEATÓRIA (IA Simples)
             else if (carta.Cor == "Preto" && jogador.IsBot)
             {
                 string[] cores = { "Vermelho", "Azul", "Verde", "Amarelo" };
@@ -131,8 +141,8 @@ namespace Uno.ViewModels
             }
 
             OnPropertyChanged(nameof(CartaTopo));
+            CommandManager.InvalidateRequerySuggested();
 
-            // Verificar Fim de Jogo
             if (jogador.Cartas.Count == 0)
             {
                 FinalizarPartida(jogador);
@@ -213,13 +223,29 @@ namespace Uno.ViewModels
 
         private void ExecutarSuspenderPartida(object parametro)
         {
-            _dataService.SaveGame(JogoAtual);
-            _mainViewModel.NavegarParaLobby(); // Navega de volta ao menu principal
+            // Se o jogo foi carregado de um save, substitui automaticamente sem pop-up
+            if (!string.IsNullOrEmpty(_nomeSaveCarregado))
+            {
+                _dataService.SaveGame(JogoAtual, _nomeSaveCarregado);
+                _mainViewModel.NavegarParaLobby();
+            }
+            else
+            {
+                // Caso contrário, mostra o pop-up para o utilizador escolher o nome
+                string nomeSugerido = _dataService.GetNextSaveName();
+                var popup = new Views.NomeSaveView(nomeSugerido, _dataService);
+
+                if (popup.ShowDialog() == true)
+                {
+                    _dataService.SaveGame(JogoAtual, popup.NomeSaveEscolhido);
+                    _mainViewModel.NavegarParaLobby();
+                }
+            }
         }
 
         private void FinalizarPartida(Jogador vencedor)
         {
-            _mainViewModel.NavegarParaResultados(JogoAtual); // Navega para o ecrã de resultados
+            _mainViewModel.NavegarParaResultados(JogoAtual);
         }
     }
 }

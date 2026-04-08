@@ -3,6 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="#FAFAFA">
     <Grid Margin="20">
+        <Grid.Resources>
+            <Style x:Key="EstiloCartaMagica" TargetType="Button">
+                <Setter Property="Background" Value="{Binding Cor, Converter={StaticResource StringToColorConverter}}"/>
+                <Setter Property="Width" Value="70"/>
+                <Setter Property="Height" Value="100"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="MolduraCarta" 
+                                    Background="{TemplateBinding Background}" 
+                                    CornerRadius="8" 
+                                    BorderBrush="Transparent" 
+                                    BorderThickness="3">
+                                <TextBlock Text="{Binding Simbolo}" 
+                                           Foreground="White" 
+                                           FontSize="24" 
+                                           FontWeight="Bold" 
+                                           HorizontalAlignment="Center" 
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter TargetName="MolduraCarta" Property="BorderBrush" Value="#FFD700"/>
+                                    <Setter TargetName="MolduraCarta" Property="Effect">
+                                        <Setter.Value>
+                                            <DropShadowEffect Color="#FFD700" BlurRadius="15" ShadowDepth="0" Opacity="1"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="MolduraCarta" Property="Opacity" Value="0.4"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -17,7 +57,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-					<StackPanel Visibility="{Binding IsBot, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="20,0">
+                    <StackPanel Visibility="{Binding IsBot, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="20,0">
                         <Ellipse Width="50" Height="50" Fill="#A8DADC" HorizontalAlignment="Center"/>
                         <TextBlock Text="{Binding Nome}" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                         <TextBlock Text="{Binding Cartas.Count, StringFormat='{}{0} cartas'}" HorizontalAlignment="Center" Foreground="Gray"/>
@@ -27,7 +67,7 @@
         </ItemsControl>
 
         <Border Background="#E9F5E9" CornerRadius="15" Padding="10,5" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="0">
-            <TextBlock Text="A tua vez" Foreground="#2A9D8F" Visibility="{Binding IsHumanTurn, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock Text="{Binding MensagemTurno}" Foreground="#2A9D8F" FontWeight="Bold" FontSize="14"/>
         </Border>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20">
@@ -44,7 +84,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2">
-            <TextBlock Text="A tua mão" FontWeight="SemiBold" Margin="0,0,0,10"/>
+            <TextBlock Text="{Binding MaoHumano.Count, StringFormat='A tua mão ({0} cartas)'}" FontWeight="SemiBold" Margin="0,0,0,10"/>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -61,10 +101,7 @@
                         <DataTemplate>
                             <Button Command="{Binding DataContext.JogarCartaCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                     CommandParameter="{Binding}" 
-                                    Background="{Binding Cor, Converter={StaticResource StringToColorConverter}}" 
-                                    Width="70" Height="100" Margin="5">
-                                <TextBlock Text="{Binding Simbolo}" Foreground="White" FontSize="24" FontWeight="Bold"/>
-                            </Button>
+                                    Style="{StaticResource EstiloCartaMagica}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

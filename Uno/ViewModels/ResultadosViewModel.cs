@@ -7,68 +7,62 @@ using Uno.ViewModels.Base;
 
 namespace Uno.ViewModels
 {
+    public class ResultadoJogador
+    {
+        public int Posicao { get; set; }
+        public string Nome { get; set; }
+        public int Pontos { get; set; }
+        public string Iniciais => Nome?.Length >= 2 ? Nome.Substring(0, 2).ToUpper() : Nome?.ToUpper();
+        public string CorFundo => Posicao == 1 ? "#FCEADE" : "#F8F9FA";
+        public string CorTextoAvatar => Posicao == 1 ? "#D97757" : "#4A4A4A";
+        public string CorFundoAvatar => Posicao == 1 ? "#F5C2B3" : "#E2E2E2";
+    }
+
     public class ResultadosViewModel : ViewModelBase
     {
-        private readonly XmlDataService _dataService;
-        private readonly MainViewModel _mainViewModel; // Para navegação
+        private readonly MainViewModel _mainViewModel;
+        private Jogo _jogo;
 
-        public Jogo JogoFinalizado { get; set; }
-        public Jogador Vencedor { get; set; }
-        public ObservableCollection<Jogador> Classificacao { get; set; }
+        public string NomeVencedor { get; private set; }
+        public ObservableCollection<ResultadoJogador> Ranking { get; private set; }
 
-        public ICommand VoltarLobbyCommand { get; }
-        public ICommand ProximaRondaCommand { get; }
+        public ICommand ProximaPartidaCommand { get; }
+        public ICommand SairCommand { get; }
 
+        // O construtor agora aceita os 3 argumentos corretamente
         public ResultadosViewModel(Jogo jogo, XmlDataService dataService, MainViewModel mainViewModel)
         {
-            JogoFinalizado = jogo;
-            _dataService = dataService;
+            _jogo = jogo;
             _mainViewModel = mainViewModel;
 
-            VoltarLobbyCommand = new RelayCommand(o => _mainViewModel.NavegarParaLobby());
-            ProximaRondaCommand = new RelayCommand(o => IniciarNovaRonda());
-
-            CalcularResultados();
-        }
-
-        private void CalcularResultados()
-        {
-            // O vencedor é quem ficou com 0 cartas
-            Vencedor = JogoFinalizado.Jogadores.FirstOrDefault(j => j.Cartas.Count == 0);
-
-            if (Vencedor != null)
+            var resultados = _jogo.Jogadores.Select(j => new ResultadoJogador
             {
-                // Calcular os pontos das cartas que sobraram nas mãos dos adversários
-                int pontosGanhos = 0;
-                foreach (var jogador in JogoFinalizado.Jogadores.Where(j => j != Vencedor))
-                {
-                    pontosGanhos += jogador.Cartas.Sum(c => c.Pontos);
-                }
+                Nome = j.Nome,
+                Pontos = j.Cartas.Sum(c => c.Pontos)
+            })
+            .OrderBy(r => r.Pontos)
+            .ToList();
 
-                // Atualizar pontuação no modelo de Jogo
-                int pontosAtuais = JogoFinalizado.GetPontuacao(Vencedor.Nome);
-                JogoFinalizado.SetPontuacao(Vencedor.Nome, pontosAtuais + pontosGanhos);
-
-                Vencedor.N_Partidas_Ganhos++;
-                foreach (var j in JogoFinalizado.Jogadores) j.N_Partidas_Jogadas++;
+            for (int i = 0; i < resultados.Count; i++)
+            {
+                resultados[i].Posicao = i + 1;
             }
 
-            // Ordenar para a UI
-            Classificacao = new ObservableCollection<Jogador>(
-                JogoFinalizado.Jogadores.OrderByDescending(j => JogoFinalizado.GetPontuacao(j.Nome))
-            );
+            Ranking = new ObservableCollection<ResultadoJogador>(resultados);
+            NomeVencedor = resultados.FirstOrDefault()?.Nome;
 
-            // Guardar estatísticas
-            _dataService.SaveStats(JogoFinalizado);
-
-            // Limpa o save do jogo suspenso, pois a partida terminou
-            _dataService.DeleteSavedGame();
+            ProximaPartidaCommand = new RelayCommand(ExecutarProximaPartida);
+            SairCommand = new RelayCommand(ExecutarSair);
         }
 
-        private void IniciarNovaRonda()
+        private void ExecutarProximaPartida(object obj)
         {
-            // Lógica para reiniciar o Jogo e navegar de volta para o TabuleiroViewModel
-            _mainViewModel.IniciarNovoJogo(JogoFinalizado.Jogadores.Count(j => j.IsBot));
+            _mainViewModel.NavegarParaLobby();
+        }
+
+        private void ExecutarSair(object obj)
+        {
+            _mainViewModel.NavegarParaLobby();
         }
     }
 }

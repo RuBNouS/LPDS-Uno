@@ -1,96 +1,82 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
+using Uno.Models;
 
 namespace Uno.Services
 {
     public class XmlDataService
     {
-        private readonly string _basePath;
-        private readonly string _gameSavePath;
-        private readonly string _statsSavePath;
+        private readonly string _saveDirectory;
 
         public XmlDataService()
         {
-            string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            _basePath = Path.Combine(userProfile, "UnoGameData");
+            string pastaDocumentos = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            _saveDirectory = Path.Combine(pastaDocumentos, "UnoSaves");
 
-            // Garante que a pasta existe
-            if (!Directory.Exists(_basePath))
+            if (!Directory.Exists(_saveDirectory))
             {
-                Directory.CreateDirectory(_basePath);
+                Directory.CreateDirectory(_saveDirectory);
             }
-
-            _gameSavePath = Path.Combine(_basePath, "PartidaSuspensa.xml");
-            _statsSavePath = Path.Combine(_basePath, "Estatisticas.xml");
         }
 
-        public void SaveGame(Models.Jogo jogo)
+        public string GetNextSaveName()
         {
-            SerializeToXml(jogo, _gameSavePath);
+            int i = 1;
+            while (File.Exists(Path.Combine(_saveDirectory, $"save{i}.xml")))
+            {
+                i++;
+            }
+            return $"save{i}";
         }
 
-        public Models.Jogo LoadGame()
+        public void SaveGame(Jogo jogo, string saveName)
         {
-            return DeserializeFromXml<Models.Jogo>(_gameSavePath);
+            if (string.IsNullOrWhiteSpace(saveName)) saveName = GetNextSaveName();
+
+            string filePath = Path.Combine(_saveDirectory, $"{saveName}.xml");
+            XmlSerializer serializer = new XmlSerializer(typeof(Jogo));
+
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                serializer.Serialize(writer, jogo);
+            }
         }
 
-        public void SaveStats(Models.Jogo estatisticas) // Reutilizamos a estrutura Jogadores para guardar estatísticas gerais
+        public Jogo LoadGame(string saveName)
         {
-            SerializeToXml(estatisticas, _statsSavePath);
+            string filePath = Path.Combine(_saveDirectory, $"{saveName}.xml");
+            if (!File.Exists(filePath)) return null;
+
+            XmlSerializer serializer = new XmlSerializer(typeof(Jogo));
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                return (Jogo)serializer.Deserialize(reader);
+            }
         }
 
-        public Models.Jogo LoadStats()
+        public List<string> GetSavedGames()
         {
-            return DeserializeFromXml<Models.Jogo>(_statsSavePath);
+            if (!Directory.Exists(_saveDirectory)) return new List<string>();
+
+            return Directory.GetFiles(_saveDirectory, "*.xml")
+                            .Select(Path.GetFileNameWithoutExtension)
+                            .ToList();
         }
 
         public bool HasSavedGame()
         {
-            return File.Exists(_gameSavePath);
+            return GetSavedGames().Count > 0;
         }
 
-        public void DeleteSavedGame()
+        public void DeleteSave(string saveName)
         {
-            if (File.Exists(_gameSavePath))
+            string filePath = Path.Combine(_saveDirectory, $"{saveName}.xml");
+            if (File.Exists(filePath))
             {
-                File.Delete(_gameSavePath);
-            }
-        }
-
-        private void SerializeToXml<T>(T data, string filePath)
-        {
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(T));
-                using (StreamWriter writer = new StreamWriter(filePath))
-                {
-                    serializer.Serialize(writer, data);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Em cenário real, deveríamos fazer log do erro
-                throw new Exception($"Erro ao guardar o ficheiro XML em {filePath}: {ex.Message}");
-            }
-        }
-
-        private T DeserializeFromXml<T>(string filePath)
-        {
-            if (!File.Exists(filePath))
-                return default;
-
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(T));
-                using (StreamReader reader = new StreamReader(filePath))
-                {
-                    return (T)serializer.Deserialize(reader);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Erro ao carregar o ficheiro XML de {filePath}: {ex.Message}");
+                File.Delete(filePath);
             }
         }
     }

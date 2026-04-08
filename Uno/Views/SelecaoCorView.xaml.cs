@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Uno.Views
+namespace Uno.Views // <--- Atualizado para o teu novo projeto!
 {
     public partial class SelecaoCorView : Window
     {
@@ -10,12 +10,12 @@ namespace Uno.Views
         public SelecaoCorView()
         {
             InitializeComponent();
-            CorEscolhida = "Vermelho"; // Cor de segurança padrão
+            CorEscolhida = "Vermelho"; // Cor padrão de segurança
         }
 
         private void BotaoCor_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button botao)
+            if (sender is Button botao && botao.Content != null)
             {
                 CorEscolhida = botao.Content.ToString();
                 this.DialogResult = true; // Fecha a janela e indica sucesso
