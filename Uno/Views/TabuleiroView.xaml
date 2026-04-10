@@ -72,8 +72,25 @@
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20">
             <Button Command="{Binding ComprarCartaCommand}" Background="White" Width="80" Height="120" Margin="10">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding TemJogadaPossivel}" Value="False"/>
+                                    <Condition Binding="{Binding IsHumanTurn}" Value="True"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#FFD700" BlurRadius="25" ShadowDepth="0" Opacity="1" />
+                                    </Setter.Value>
+                                </Setter>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
                 <StackPanel>
-                    <Border Background="red" Width="60" Height="90" CornerRadius="5"/>
+                    <Border Background="#E63946" Width="60" Height="90" CornerRadius="5"/>
                     <TextBlock Text="Baralho" FontSize="10" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                 </StackPanel>
             </Button>
@@ -101,16 +118,27 @@
                         <DataTemplate>
                             <Button Command="{Binding DataContext.JogarCartaCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                     CommandParameter="{Binding}" 
-                                    Width="70" Height="100" Margin="5"
-                                    Cursor="Hand">
+                                    Width="70" Height="100" Margin="5" Cursor="Hand">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
-                                        <Border Background="{Binding Cor, Converter={StaticResource StringToColorConverter}}" 
+                                        <Border x:Name="BordaCarta"
+                                                Background="{Binding Cor, Converter={StaticResource StringToColorConverter}}" 
                                                 CornerRadius="8" 
                                                 BorderBrush="#333333" 
                                                 BorderThickness="1">
                                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                         </Border>
+
+                                        <ControlTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding PodeSerJogada}" Value="True">
+                                                <Setter TargetName="BordaCarta" Property="Effect">
+                                                    <Setter.Value>
+                                                        <DropShadowEffect Color="#FFD700" BlurRadius="20" ShadowDepth="0" Opacity="1" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter TargetName="BordaCarta" Property="Margin" Value="0,0,0,15"/>
+                                            </DataTrigger>
+                                        </ControlTemplate.Triggers>
                                     </ControlTemplate>
                                 </Button.Template>
                                 <TextBlock Text="{Binding Simbolo}" Foreground="White" FontSize="24" FontWeight="Bold"/>

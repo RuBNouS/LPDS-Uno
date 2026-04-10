@@ -87,6 +87,8 @@ namespace Uno.ViewModels
                 IsHumanTurn = true;
                 _unoGritadoPeloHumano = false;
                 CommandManager.InvalidateRequerySuggested();
+
+                AtualizarJogadasPossiveis();
             }
             else
             {
