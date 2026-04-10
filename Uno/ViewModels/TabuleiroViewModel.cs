@@ -20,6 +20,13 @@ namespace Uno.ViewModels
         private int _indiceJogadorAtual;
         private string _nomeSaveCarregado; // Armazena o nome do save se foi carregado
 
+        private bool _temJogadaPossivel;
+        public bool TemJogadaPossivel
+        {
+            get => _temJogadaPossivel;
+            set { _temJogadaPossivel = value; OnPropertyChanged(); }
+        }
+
         public Jogo JogoAtual
         {
             get => _jogoAtual;
@@ -86,6 +93,21 @@ namespace Uno.ViewModels
                 IsHumanTurn = false;
                 await RotinaBotAsync(JogoAtual.JogadorAtivo);
             }
+        }
+        private void AtualizarJogadasPossiveis()
+        {
+            if (MaoHumano == null || CartaTopo == null) return;
+
+            bool temAlgumaJogada = false;
+            foreach (var carta in MaoHumano)
+            {
+                bool pode = carta.Cor == CartaTopo.Cor || carta.Simbolo == CartaTopo.Simbolo || carta.Cor == "Preto";
+                carta.PodeSerJogada = pode;
+
+                if (pode) temAlgumaJogada = true;
+            }
+
+            TemJogadaPossivel = temAlgumaJogada;
         }
 
         private bool PodeJogarCarta(object parametro)
