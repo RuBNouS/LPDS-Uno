@@ -10,13 +10,19 @@ namespace Uno.ViewModels
 		private readonly MainViewModel _mainViewModel;
 		private readonly XmlDataService _dataService;
 
-		// Agora a lista guarda objetos que controlam o estado de edição
+		private string _mensagemErro;
+		public string MensagemErro
+		{
+			get => _mensagemErro;
+			set { _mensagemErro = value; OnPropertyChanged(); }
+		}
+
 		public ObservableCollection<SaveItemViewModel> ListaSaves { get; } = new ObservableCollection<SaveItemViewModel>();
 
 		public ICommand CarregarSaveCommand { get; }
 		public ICommand ApagarSaveCommand { get; }
 		public ICommand EditarSaveCommand { get; }
-		public ICommand RenomearSaveCommand { get; } // Novo comando para o Enter
+		public ICommand RenomearSaveCommand { get; }
 		public ICommand VoltarCommand { get; }
 
 		public SavesViewModel(MainViewModel mainViewModel, XmlDataService dataService)
@@ -70,12 +76,10 @@ namespace Uno.ViewModels
 			{
 				if (saveItem.IsEditing)
 				{
-					// Se já estava em modo edição e clicou no lápis de novo, guarda as alterações
 					ExecutarRenomearSave(saveItem);
 				}
 				else
 				{
-					// Ativa o modo de edição (mostra a caixa de texto)
 					saveItem.IsEditing = true;
 				}
 			}
@@ -85,27 +89,30 @@ namespace Uno.ViewModels
 		{
 			if (parametro is SaveItemViewModel saveItem)
 			{
-				saveItem.IsEditing = false; // Fecha a caixa de texto
+				saveItem.IsEditing = false;
 
-				// Verifica se o utilizador não apagou tudo e se o nome realmente mudou
-				if (!string.IsNullOrWhiteSpace(saveItem.NomeSave) && saveItem.NomeSave != saveItem.NomeOriginal)
-				{
-					// ATENÇÃO: Tens de ter um método RenameSave no teu XmlDataService para alterar o ficheiro no Windows!
-					// _dataService.RenameSave(saveItem.NomeOriginal, saveItem.NomeSave);
+				string novoNome = saveItem.NomeSave?.Trim();
 
-					// Atualiza o nome original para refletir a mudança
-					saveItem.NomeOriginal = saveItem.NomeSave;
-				}
-				else
+				if (string.IsNullOrWhiteSpace(novoNome) || novoNome == saveItem.NomeOriginal)
 				{
-					// Se estiver vazio ou for igual, reverte para o nome anterior
 					saveItem.NomeSave = saveItem.NomeOriginal;
+					return;
 				}
+
+				bool nomeJaExiste = ListaSaves.Any(s => s != saveItem && s.NomeOriginal.Equals(novoNome, System.StringComparison.OrdinalIgnoreCase));
+
+				if (nomeJaExiste)
+				{
+					MensagemErro = "Erro: Já existe um jogo guardado com esse nome!";
+					saveItem.NomeSave = saveItem.NomeOriginal;
+					return;
+				}
+				saveItem.NomeSave = novoNome;
+				saveItem.NomeOriginal = saveItem.NomeSave;
 			}
 		}
 	}
 
-	// Classe auxiliar que representa cada Save na lista
 	public class SaveItemViewModel : ViewModelBase
 	{
 		private string _nomeSave;

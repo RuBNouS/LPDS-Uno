@@ -14,8 +14,8 @@
 						<ScrollViewer VerticalScrollBarVisibility="Auto">
 							<StackPanel Width="550" Height="590">
 								<TextBlock Text="Saves Disponíveis" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center"/>
-								<TextBlock Text="Escolhe um jogo para retomar de onde ficaste" Margin="0,0,0,20" HorizontalAlignment="Center"/>
-
+								<TextBlock Text="Escolhe um jogo para retomar de onde ficaste" Margin="0,0,0,0" HorizontalAlignment="Center"/>
+								<TextBlock x:Name="MensagemErro" Text="{Binding MensagemErro}" Foreground="red" Height="20" HorizontalAlignment="Center"/>
 								<ListBox ItemsSource="{Binding ListaSaves}" BorderBrush="white" Height="300" BorderThickness="1">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
@@ -28,9 +28,9 @@
 														<ColumnDefinition Width="Auto"/>
 													</Grid.ColumnDefinitions>
 
-													<StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0">
+													<StackPanel Grid.Column="0" VerticalAlignment="Center">
 														<Grid>
-															<TextBlock x:Name="TxtNome" Text="{Binding NomeSave}" FontWeight="Bold" FontSize="16" Foreground="#444444"/>
+															<TextBlock x:Name="TxtNome" Text="{Binding NomeSave}" FontWeight="Bold" FontSize="16" Foreground="Black"/>
 
 															<TextBox x:Name="EditNome" Text="{Binding NomeSave, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" FontSize="16" FontWeight="Bold">
 																<TextBox.InputBindings>
