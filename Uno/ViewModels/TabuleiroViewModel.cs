@@ -100,16 +100,17 @@ namespace Uno.ViewModels
         {
             if (MaoHumano == null || CartaTopo == null) return;
 
-            bool temAlgumaJogada = false;
+            TemJogadaPossivel = MaoHumano.Any(c =>
+                    c.Cor == CartaTopo.Cor ||
+                    c.Simbolo == CartaTopo.Simbolo ||
+                    c.Cor == "Preto");
+
             foreach (var carta in MaoHumano)
             {
-                bool pode = carta.Cor == CartaTopo.Cor || carta.Simbolo == CartaTopo.Simbolo || carta.Cor == "Preto";
-                carta.PodeSerJogada = pode;
-
-                if (pode) temAlgumaJogada = true;
+                carta.PodeSerJogada = (carta.Cor == CartaTopo.Cor ||
+                                       carta.Simbolo == CartaTopo.Simbolo ||
+                                       carta.Cor == "Preto");
             }
-
-            TemJogadaPossivel = temAlgumaJogada;
         }
 
         private bool PodeJogarCarta(object parametro)

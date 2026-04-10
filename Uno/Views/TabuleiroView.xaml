@@ -77,18 +77,19 @@
                         <Style.Triggers>
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding TemJogadaPossivel}" Value="False"/>
                                     <Condition Binding="{Binding IsHumanTurn}" Value="True"/>
+                                    <Condition Binding="{Binding TemJogadaPossivel}" Value="False"/>
                                 </MultiDataTrigger.Conditions>
                                 <Setter Property="Effect">
                                     <Setter.Value>
-                                        <DropShadowEffect Color="#FFD700" BlurRadius="25" ShadowDepth="0" Opacity="1" />
+                                        <DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="0" Opacity="0.9" />
                                     </Setter.Value>
                                 </Setter>
                             </MultiDataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
+
                 <StackPanel>
                     <Border Background="#E63946" Width="60" Height="90" CornerRadius="5"/>
                     <TextBlock Text="Baralho" FontSize="10" HorizontalAlignment="Center" Margin="0,5,0,0"/>

@@ -16,10 +16,10 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Background="red" Content="Vermelho" Click="BotaoCor_Click" Foreground="White" Width="120" Height="60" Margin="5" Grid.Row="0" Grid.Column="0"/>
-            <Button Background="blue" Content="Azul" Click="BotaoCor_Click" Foreground="White" Width="120" Height="60" Margin="5" Grid.Row="0" Grid.Column="1"/>
-            <Button Background="green" Content="Verde" Click="BotaoCor_Click" Foreground="White" Width="120" Height="60" Margin="5" Grid.Row="1" Grid.Column="0"/>
-            <Button Background="yellow" Content="Amarelo" Click="BotaoCor_Click" Foreground="White" Width="120" Height="60" Margin="5" Grid.Row="1" Grid.Column="1"/>
+            <Button Background="#E63946" Content="Vermelho" Click="BotaoCor_Click" Foreground="White" Width="120" Height="60" Margin="5" Grid.Row="0" Grid.Column="0"/>
+            <Button Background="#457B9D" Content="Azul" Click="BotaoCor_Click" Foreground="White" Width="120" Height="60" Margin="5" Grid.Row="0" Grid.Column="1"/>
+            <Button Background="#2A9D8F" Content="Verde" Click="BotaoCor_Click" Foreground="White" Width="120" Height="60" Margin="5" Grid.Row="1" Grid.Column="0"/>
+            <Button Background="#E9C46A" Content="Amarelo" Click="BotaoCor_Click" Foreground="White" Width="120" Height="60" Margin="5" Grid.Row="1" Grid.Column="1"/>
         </Grid>
     </StackPanel>
 </Window>
