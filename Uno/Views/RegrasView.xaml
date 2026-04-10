@@ -1,7 +1,7 @@
 <UserControl x:Class="Uno.Views.RegrasView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="white">
+             Background="White">
 
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -10,7 +10,7 @@
                 <Button Command="{Binding VoltarCommand}" Content="Menu"
                         Background="White" Foreground="black" BorderBrush="black" BorderThickness="1"
                         Height="50" Width="150" FontSize="20" HorizontalAlignment="left" Margin="30"
-                        Style="{StaticResource RoundedButtonStyle}" />
+                        Style="{StaticResource RoundedButtonStyle}"/>
                 <Grid>
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel Width="560" Height="590">
@@ -18,11 +18,11 @@
 
                             <TextBlock Text="Objetivo" FontSize="20" FontWeight="Bold" Foreground="red" Margin="0,0,0,5"/>
                             <TextBlock Text="Ser o primeiro jogador a descartar todas as cartas da mão. O jogo pode ter várias rondas; os pontos acumulam-se com as cartas que os adversários ainda têm."
-									   TextWrapping="Wrap" Foreground="black" Margin="0,0,0,20" LineHeight="22"/>
+									   TextWrapping="Wrap" Foreground="black" Margin="0,0,0,20"/>
 
                             <TextBlock Text="Como Jogar" FontSize="20" FontWeight="Bold" Foreground="red" Margin="0,0,0,5"/>
                             <TextBlock Text="No teu turno, joga uma carta que corresponda à cor ou ao número da carta no topo da pilha de descarte. Se não tiveres nenhuma carta válida, retira uma carta do baralho."
-									   TextWrapping="Wrap" Foreground="black" Margin="0,0,0,20" LineHeight="22"/>
+									   TextWrapping="Wrap" Foreground="black" Margin="0,0,0,20"/>
 
                             <TextBlock Text="Cartas Especiais" FontSize="20" FontWeight="Bold" Foreground="red" Margin="0,0,0,10"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
@@ -47,7 +47,7 @@
 
                             <TextBlock Text="Dizer UNO!" FontSize="20" FontWeight="Bold" Foreground="red" Margin="0,0,0,5"/>
                             <TextBlock Text="Quando te restar apenas uma carta, deves clicar no botão UNO!. Se não o fizeres e outro jogador se aperceber, terás de comprar cartas de penalização."
-									   TextWrapping="Wrap" Foreground="black" Margin="0,0,0,30" LineHeight="22"/>
+									   TextWrapping="Wrap" Foreground="black" Margin="0,0,0,30"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
