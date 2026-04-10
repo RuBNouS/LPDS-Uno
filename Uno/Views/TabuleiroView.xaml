@@ -133,10 +133,9 @@
                                             <DataTrigger Binding="{Binding PodeSerJogada}" Value="True">
                                                 <Setter TargetName="BordaCarta" Property="Effect">
                                                     <Setter.Value>
-                                                        <DropShadowEffect Color="#FFD700" BlurRadius="20" ShadowDepth="0" Opacity="1" />
+                                                        <DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="0" Opacity="0.9" />
                                                     </Setter.Value>
                                                 </Setter>
-                                                <Setter TargetName="BordaCarta" Property="Margin" Value="0,0,0,15"/>
                                             </DataTrigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>

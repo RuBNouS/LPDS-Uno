@@ -11,22 +11,22 @@ namespace Uno.Services
         {
             var baralho = new Baralho();
             string[] cores = { "Vermelho", "Azul", "Verde", "Amarelo" };
-            string[] acoes = { "Saltar", "Inverter", "+2" };
+
+            // 1. ALTERAÇÃO AQUI: Em vez de "Saltar" e "Inverter", usamos símbolos
+            string[] acoes = { "Ø", "⇄", "+2" };
+
             int idCounter = 1;
 
             foreach (var cor in cores)
             {
-                // Um '0' por cor
                 baralho.Cartas.Add(new Carta { Cor = cor, Simbolo = "0", Pontos = 0 });
 
-                // Dois de cada número de 1 a 9
                 for (int i = 1; i <= 9; i++)
                 {
                     baralho.Cartas.Add(new Carta { Id = idCounter++, Cor = cor, Simbolo = i.ToString(), Pontos = i });
                     baralho.Cartas.Add(new Carta { Id = idCounter++, Cor = cor, Simbolo = i.ToString(), Pontos = i });
                 }
 
-                // Duas cartas de cada ação por cor
                 foreach (var acao in acoes)
                 {
                     baralho.Cartas.Add(new Carta { Id = idCounter++, Cor = cor, Simbolo = acao, Pontos = 20 });
@@ -34,11 +34,12 @@ namespace Uno.Services
                 }
             }
 
-            // 4 Coringas (Wild) e 4 Coringas +4 (Wild +4)
+            // 2. ALTERAÇÃO AQUI: Em vez de "Wild" e "Wild +4", usamos um símbolo para o curinga e apenas "+4"
             for (int i = 0; i < 4; i++)
             {
-                baralho.Cartas.Add(new Carta { Id = idCounter++, Cor = "Preto", Simbolo = "Wild", Pontos = 50 });
-                baralho.Cartas.Add(new Carta { Id = idCounter++, Cor = "Preto", Simbolo = "Wild +4", Pontos = 50 });
+                // Podes usar "❖", "❂" ou "🎨" para representar o curinga
+                baralho.Cartas.Add(new Carta { Id = idCounter++, Cor = "Preto", Simbolo = "W", Pontos = 50 });
+                baralho.Cartas.Add(new Carta { Id = idCounter++, Cor = "Preto", Simbolo = "+4", Pontos = 50 });
             }
 
             baralho.Cartas = Baralhar(baralho.Cartas);
