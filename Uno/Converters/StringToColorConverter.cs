@@ -11,7 +11,7 @@ namespace Uno.Converters
         {
             if (value is string cor)
             {
-                // Mapeia o texto da cor para as cores bonitas dos mockups
+                // Mapeia o texto da cor para as cores bonitas dos mockups   
                 return cor switch
                 {
                     "Vermelho" => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E63946")),
